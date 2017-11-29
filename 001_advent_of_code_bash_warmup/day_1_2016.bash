@@ -13,7 +13,7 @@ DIRECTION=0
 
 while read line; do
   CHANGE=${line:0:1};
-  DISTANCE=${line:1:56};
+  DISTANCE=${line:1};
   if [ $CHANGE == 'R' ]; then
     DIRECTION=$(( $DIRECTION + 1 ))
   else
@@ -22,20 +22,14 @@ while read line; do
   DIRECTION=$(( ($DIRECTION + 4) % 4 ))
   if [ $DIRECTION == 0 ]; then
     Y=$(( Y + $DISTANCE ))
-  fi
-  if [ $DIRECTION == 1 ]; then
+  elif [ $DIRECTION == 1 ]; then
     X=$(( X + $DISTANCE ))
-  fi
-  if [ $DIRECTION == 2 ]; then
+  elif [ $DIRECTION == 2 ]; then
     Y=$(( Y - $DISTANCE ))
-  fi
-  if [ $DIRECTION == 3 ]; then
+  elif [ $DIRECTION == 3 ]; then
     X=$(( X - $DISTANCE ))
   fi
 done < 'input.txt';
-
-X=$(( 0-$X ))
-Y=$(( 0-$Y ))
 
 if [ $X -lt 0 ]; then
   X=$(( 0-$X ));
