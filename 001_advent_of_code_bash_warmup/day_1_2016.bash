@@ -40,3 +40,56 @@ if [ $Y -lt 0 ]; then
 fi
 
 echo $(( $X + $Y ))
+
+# part 2
+
+echo "0, 0" > 'steps.txt'
+
+X=0
+Y=0
+
+DIRECTION=0
+
+while read line; do
+  CHANGE=${line:0:1};
+  DISTANCE=${line:1};
+  if [ $CHANGE == 'R' ]; then
+    DIRECTION=$(( $DIRECTION + 1 ))
+  else
+    DIRECTION=$(( $DIRECTION - 1 ))
+  fi
+  DIRECTION=$(( ($DIRECTION + 4) % 4 ))
+  if [ $DIRECTION == 0 ]; then
+    for i in $(seq 1 $DISTANCE); do
+      Y=$(( Y + 1 ))
+      echo $X, $Y >> 'steps.txt';
+    done;
+  elif [ $DIRECTION == 1 ]; then
+    for i in $(seq 1 $DISTANCE); do
+      X=$(( X + 1 ))
+      echo $X, $Y >> 'steps.txt';
+    done;
+  elif [ $DIRECTION == 2 ]; then
+    for i in $(seq 1 $DISTANCE); do
+      Y=$(( Y - 1 ))
+      echo $X, $Y >> 'steps.txt';
+    done;
+  elif [ $DIRECTION == 3 ]; then
+    for i in $(seq 1 $DISTANCE); do
+      X=$(( X - 1 ))
+      echo $X, $Y >> 'steps.txt';
+    done;
+  fi
+done < 'input.txt';
+
+COUNTER=-1
+while read line; do
+  COUNTER=$(( $COUNTER + 1 ))
+  if [ $COUNTER == 0 ]; then
+    continue;
+  fi
+  if cat 'steps.txt' | head -n $COUNTER | grep -- "^$line$"; then
+    echo $line
+    break;
+  fi
+done < 'steps.txt';
